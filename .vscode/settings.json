@@ -1,0 +1,9 @@
+{
+    "cSpell.words": [
+        "Ecom",
+        "jazzmin"
+    ],
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true
+}
