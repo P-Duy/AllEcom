@@ -14,7 +14,13 @@ from core.models import (
 
 # Create your views here.
 def index(request):
-    products = Product.objects.filter(product_status="published")
+    products = Product.objects.filter(product_status="published", featured=True)
 
     context = {"products": products}
     return render(request, "core/index.html", context)
+
+
+def product_list_view(request):
+    products = Product.objects.filter(product_status="published")
+    context = {"products": products}
+    return render(request, "core/product_list.html", context)
