@@ -30,3 +30,14 @@ def category_list_view(request):
     categories = Category.objects.all()
     context = {"categories": categories}
     return render(request, "core/category_list.html", context)
+
+
+def category_product_list_view(request, cid):
+    category = Category.objects.get(cid=cid)
+    product = Product.objects.filter(category=category, product_status="published")
+
+    context = {
+        "product": product,
+        "category": category,
+    }
+    return render(request, "core/category_product_list.html", context)
