@@ -26,13 +26,15 @@ class ProductAdmin(admin.ModelAdmin):
         "title",
         "product_image",
         "price",
+        "category",
+        "vendor",
         "featured",
         "product_status",
     ]
 
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["title", "category_image"]
+    list_display = ["title", "category_image", "category_svg"]
 
 
 class VendorAdmin(admin.ModelAdmin):

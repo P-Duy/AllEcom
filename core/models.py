@@ -1,4 +1,5 @@
 from email.policy import default
+from django.core.exceptions import ValidationError
 from pyexpat import model
 from django.db import models
 from shortuuid.django_fields import ShortUUIDField
@@ -28,6 +29,15 @@ RATING = (
 )
 
 
+def validate_file_extension(value):
+    import os
+
+    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    valid_extensions = [".jpg", ".png", ".svg"]
+    if not ext.lower() in valid_extensions:
+        raise ValidationError("Unsupported file extension.")
+
+
 # Create your models here.
 def user_directory_path(instance, filename):
     return "user_{0}/{1}".format(instance.user.id, filename)
@@ -38,13 +48,24 @@ class Category(models.Model):
         unique=True, length=10, max_length=10, prefix="cat", alphabet="abcdefgh12"
     )
     title = models.CharField(max_length=100, default="Food")
-    image = models.ImageField(upload_to="category", default="category.jpg")
+    image = models.ImageField(
+        upload_to="category",
+        default="category.jpg",
+    )
+    svg = models.FileField(
+        upload_to="category",
+        default="category.jpg",
+        validators=[validate_file_extension],
+    )
 
     class Meta:
         verbose_name_plural = "categories"
 
     def category_image(self):
         return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
+
+    def category_svg(self):
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.svg.url))
 
     def __str__(self):
         return self.title
@@ -86,7 +107,9 @@ class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefgh12")
 
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(
+        Category, on_delete=models.SET_NULL, null=True, related_name="category"
+    )
     vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
 
     title = models.CharField(max_length=100, default="Product Title")
