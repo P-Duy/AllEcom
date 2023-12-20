@@ -84,8 +84,10 @@ class Vendor(models.Model):
 
 class Product(models.Model):
     pid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefgh12")
+
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
 
     title = models.CharField(max_length=100, default="Product Title")
     image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
@@ -145,7 +147,7 @@ class ProductImages(models.Model):
 
 class CartOrder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=9, decimal_places=2, default="2.22")  # 20.12
+    price = models.DecimalField(max_digits=9, decimal_places=3, default="2.22")  # 20.12
     paid_status = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
     product_status = models.CharField(
@@ -164,7 +166,7 @@ class CartOrderItems(models.Model):
     image = models.CharField(max_length=200)
     qty = models.IntegerField(default=1)
     price = models.DecimalField(max_digits=9, decimal_places=2, default="2.22")  # 20.12
-    total = models.DecimalField(max_digits=10, decimal_places=2, default="2.22")
+    total = models.DecimalField(max_digits=10, decimal_places=2, default="22.22")
 
     class Meta:
         verbose_name_plural = "Cart Order Items"
