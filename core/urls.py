@@ -16,4 +16,5 @@ urlpatterns = [
     ),
     # Vendor page
     path("vendors/", views.vendor_list_view, name="vendors-list"),
+    path("vendor/<vid>/", views.vendor_detail_view, name="vendor-detail"),
 ]
