@@ -90,6 +90,7 @@ class Vendor(models.Model):
     authentic_rating = models.CharField(max_length=100, default="100")
     days_return = models.CharField(max_length=100, default="100")
     Warranty_period = models.CharField(max_length=100, default="100")
+    date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
@@ -110,7 +111,12 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, related_name="category"
     )
-    vendor = models.ForeignKey(Vendor, on_delete=models.SET_NULL, null=True)
+    vendor = models.ForeignKey(
+        Vendor,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="product",
+    )
 
     title = models.CharField(max_length=100, default="Product Title")
     image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
