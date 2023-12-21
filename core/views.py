@@ -16,7 +16,9 @@ from core.models import (
 def index(request):
     products = Product.objects.filter(product_status="published", featured=True)
 
-    context = {"products": products}
+    context = {
+        "products": products,
+    }
     return render(request, "core/index.html", context)
 
 
