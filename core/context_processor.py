@@ -13,10 +13,10 @@ from core.models import (
 
 
 def default(request):
-    products = Product.objects.filter(product_status="published", featured=True)
     categories = Category.objects.all()
+    address = Address.objects.get(user=request.user)
     context = {
-        "products": products,
+        "address": address,
         "categories": categories,
     }
     return context

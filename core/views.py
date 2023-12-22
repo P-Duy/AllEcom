@@ -62,3 +62,19 @@ def vendor_detail_view(request, vid):
         "products": products,
     }
     return render(request, "core/vendor_detail.html", context)
+
+
+def product_detail_view(request, pid):
+    product = Product.objects.get(pid=pid)
+    p_images = product.p_images.all()
+    # product_images = ProductImages.objects.filter(product=product)
+    # product_reviews = ProductReview.objects.filter(product=product)
+    # product_tags = Tags.objects.filter(product=product)
+    context = {
+        "product": product,
+        # "product_images": product_images,
+        # "product_reviews": product_reviews,
+        # "product_tags": product_tags,
+        "p_images": p_images,
+    }
+    return render(request, "core/product_detail.html", context)

@@ -127,6 +127,11 @@ class Product(models.Model):
     old_price = models.DecimalField(max_digits=9, decimal_places=2, default="2.22")
 
     specifications = models.TextField(blank=True, default="this is the product")
+    type = models.CharField(max_length=100, default="Organic", null=True, blank=True)
+    stock_count = models.CharField(max_length=100, default="10", null=True, blank=True)
+    life = models.CharField(max_length=100, default="100 ngày", null=True, blank=True)
+    mdf = models.DateTimeField(auto_now_add=False, null=True, blank=True)
+
     # tag = models.ForeignKey(Tags, on_delete=models.SET_NULL, null=True)
 
     product_status = models.CharField(
@@ -164,7 +169,12 @@ class Product(models.Model):
 
 
 class ProductImages(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(
+        Product,
+        related_name="p_images",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
     image = models.ImageField(upload_to="product-images", default="product.jpg")
     date = models.DateTimeField(auto_now_add=True)
 
