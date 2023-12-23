@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third party libraries
     "taggit",
+    "ckeditor",
     # Custom application
     "core",
 ]
@@ -149,3 +150,15 @@ JAZZMIN_SETTINGS = {
 
 # Setting userauths to the default admin site
 AUTH_USER_MODEL = "userauths.User"
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "skin": "moono",
+        "codeSnippet_theme": "monokai",
+        "toolbar": "all",
+        "extraPlugins": ",".join(["codesnippet", "widget", "dialog"]),
+    }
+}

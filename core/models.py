@@ -6,6 +6,7 @@ from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
 from userauths.models import User
 from taggit.managers import TaggableManager
+from ckeditor_uploader.fields import RichTextUploadingField
 
 STATUS_CHOICES = (
     ("process", "Processing"),
@@ -83,7 +84,7 @@ class Vendor(models.Model):
     title = models.CharField(max_length=100, default="Duy")
     image = models.ImageField(upload_to=user_directory_path, default="user.jpg")
     cover_image = models.ImageField(upload_to=user_directory_path, default="user.jpg")
-    description = models.TextField(blank=True, default="hello world")
+    description = RichTextUploadingField(blank=True, default="hello world")
 
     address = models.CharField(max_length=100, default="123 Hồ Chí Minh")
     contact = models.CharField(max_length=100, default="+123 (456) 789")
@@ -122,12 +123,12 @@ class Product(models.Model):
 
     title = models.CharField(max_length=100, default="Product Title")
     image = models.ImageField(upload_to=user_directory_path, default="product.jpg")
-    description = models.TextField(blank=True, default="this is the product")
+    description = RichTextUploadingField(blank=True, default="this is the product")
 
     price = models.DecimalField(max_digits=9, decimal_places=2, default="2.22")  # 20.12
     old_price = models.DecimalField(max_digits=9, decimal_places=2, default="2.22")
 
-    specifications = models.TextField(blank=True, default="this is the product")
+    specifications = RichTextUploadingField(blank=True, default="this is the product")
     type = models.CharField(max_length=100, default="Organic", null=True, blank=True)
     stock_count = models.CharField(max_length=100, default="10", null=True, blank=True)
     life = models.CharField(max_length=100, default="100 ngày", null=True, blank=True)
