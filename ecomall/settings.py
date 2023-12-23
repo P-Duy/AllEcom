@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third party libraries
+    "taggit",
     # Custom application
     "core",
 ]
@@ -146,4 +148,4 @@ JAZZMIN_SETTINGS = {
 }
 
 # Setting userauths to the default admin site
-AUTH_USER_MODEL = 'userauths.User'
+AUTH_USER_MODEL = "userauths.User"

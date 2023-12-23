@@ -92,17 +92,18 @@
                                             <div class="font-xs">
                                                 <ul class="mr-50 float-start">
                                                     <li class="mb-5">Type: <span class="text-brand">{{product.title}}</span></li>
-                                                    <li class="mb-5">MFG:<span class="text-brand"> {{product.mdf|date:"d M, Y"}}</span></li>
+                                                    <li class="mb-5">MFG:<span class="text-brand"> {{product.mdf|date:"d M, Y"}}</span></li>ủ
                                                     <li>LIFE: <span class="text-brand">{{product.life}}</span></li>
                                                 </ul>
                                                 <ul class="float-start">
                                                     <li class="mb-5">SKU: <a href="#">{{product.sku}}</a></li>
-                                                    <li class="mb-5">Tags: <a href="#" rel="tag">Snack</a>, <a href="#" rel="tag">Organic</a>, <a href="#" rel="tag">Brown</a></li>
+                                                    <li class="mb-5">Tags:{% for tag in product.tags.all %} 
+                                                        <a href="{% url 'core:tags' tag.slug %}" rel="tag">#{{tag.name}}</a>{% endfor %}
+                                                    </li>
                                                     <li>Stock:<span class="in-stock text-brand ml-5">Còn {{product.stock_count}} trong kho</span></li>
                                                 </ul>
                                             </div>
-                                        </div>
-                                        <!-- Detail Info -->
+                                        </div> 
                                     </div>
                                 </div>
                                 <div class="product-info">

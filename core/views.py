@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, get_list_or_404, get_object_or_404
 from core.models import (
     Category,
     Vendor,
@@ -11,6 +11,8 @@ from core.models import (
     wishlist,
     Address,
 )
+from django.db.models import Count
+from taggit.models import Tag
 
 
 # Create your views here.
@@ -80,3 +82,15 @@ def product_detail_view(request, pid):
         "products": products,
     }
     return render(request, "core/product_detail.html", context)
+
+
+def tag_list(request, tag_slug=None):
+    tag = None
+    products = Product.objects.filter(product_status="published").order_by("-id")
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        products = products.filter(tags__in=[tag])
+    else:
+        products = Product.objects.all()
+    context = {"tag": tag, "product": products}
+    return render(request, "core/tag_list.html", context)
