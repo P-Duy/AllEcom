@@ -192,7 +192,7 @@
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
-                            <form action="#">
+                            <form action="{% url "core:search" %}"method="GET">
                                 <select class="select-active">
                                     <option>All Categories</option>
                                     <option>Milks and Dairies</option>
@@ -206,7 +206,8 @@
                                     <option>Noodles & Rice</option>
                                     <option>Ice cream</option>
                                 </select>
-                                <input type="text" placeholder="Search for items..." />
+                                <input type="text" placeholder="Search for items..." name ="q" />
+                                <button type="submit" class="fas fa-search" ></button>
                             </form>
                         </div>
                         <div class="header-action-right">
