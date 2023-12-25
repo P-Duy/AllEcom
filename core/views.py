@@ -15,6 +15,7 @@ from core.models import (
 from django.db.models import Count, Avg
 from taggit.models import Tag
 from core.forms import ProductReviewForm
+from django.template.loader import render_to_string
 
 
 # Create your views here.
@@ -118,6 +119,8 @@ def tag_list(request, tag_slug=None):
 
 
 def ajax_add_review(request, pid):
+    if not request.user.is_authenticated:
+        return JsonResponse({"bool": False, "error": "User not authenticated"})
     product = Product.objects.get(pk=pid)
     user = request.user
 
@@ -129,7 +132,7 @@ def ajax_add_review(request, pid):
     )
 
     context = {
-        "user": user.username,
+        "user": user.username.id,
         "review": request.POST["review"],
         "rating": request.POST["rating"],
     }
@@ -157,3 +160,27 @@ def search_view(request):
         "query": query,
     }
     return render(request, "core/search.html", context)
+
+
+def filter_product(request):
+    categories = request.GET.getlist("category[]")
+    vendors = request.GET.getlist("vendor[]")
+
+    # min_price = request.GET["min_price"]
+    # max_price = request.GET["max_price"]
+
+    products = (
+        Product.objects.filter(product_status="published").order_by("-id").distinct()
+    )
+
+    # products = products.filter(price__gte=min_price)
+    # products = products.filter(price__lte=max_price)
+
+    if len(categories) > 0:
+        products = products.filter(category__id__in=categories).distinct()
+
+    if len(vendors) > 0:
+        products = products.filter(vendor__id__in=vendors).distinct()
+
+    data = render_to_string("core/async/product_list.html", {"products": products})
+    return JsonResponse({"data": data})
