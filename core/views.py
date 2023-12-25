@@ -82,6 +82,17 @@ def product_detail_view(request, pid):
     # Product reviews form
     review_form = ProductReviewForm()
 
+    make_review = True
+
+    if request.user.is_authenticated:
+        address = Address.objects.get(status=True, user=request.user)
+        user_review_count = ProductReview.objects.filter(
+            user=request.user, product=product
+        ).count()
+
+        if user_review_count > 0:
+            make_review = False
+
     context = {
         "product": product,
         "reviews": product_reviews,
@@ -89,6 +100,7 @@ def product_detail_view(request, pid):
         "products": products,
         "avg_rating": avg_rating,
         "review_form": review_form,
+        "make_review": make_review,
     }
     return render(request, "core/product_detail.html", context)
 
