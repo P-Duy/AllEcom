@@ -239,6 +239,8 @@ $(document).on("click", ".update-product", function () {
             this_val.show()
             $(".cart-items-count").text(response.totalcartitems)
             $("#cart-list").html(response.data)
+            console.log(response.product_qty)
+            $(".product-qty-" + product_id).val(1)
             window.location.reload()
         }
     })

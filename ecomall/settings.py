@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     # Third party libraries
     "taggit",
     "ckeditor",
+    # PayPal Integration
+    "paypal.standard.ipn",
     # Custom application
     "core",
 ]
@@ -148,6 +150,9 @@ JAZZMIN_SETTINGS = {
     "copyright": "All-Ecom-Shop.com",
 }
 
+LOGIN_URL = "userauths:sign-in"
+LOGIN_REDIRECT_URL = "core:index"
+LOGOUT_REDIRECT_URL = "userauths:sign-in"
 # Setting userauths to the default admin site
 AUTH_USER_MODEL = "userauths.User"
 
@@ -162,3 +167,6 @@ CKEDITOR_CONFIGS = {
         "extraPlugins": ",".join(["codesnippet", "widget", "dialog"]),
     }
 }
+
+PAYPAL_RECEIVER_EMAIL = "sb-qmqco28921691@business.example.com"
+PAYPAL_TEST = True

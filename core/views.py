@@ -12,6 +12,13 @@ from core.models import (
     wishlist,
     Address,
 )
+
+from django.urls import reverse
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from paypal.standard.forms import PayPalPaymentsForm
+
 from django.db.models import Count, Avg
 from taggit.models import Tag
 from core.forms import ProductReviewForm
@@ -269,13 +276,26 @@ def delete_item_from_cart(request):
 
 def update_cart(request):
     product_id = str(request.GET["id"])
-    product_qty = request.GET["qty"]
+    product_qty = int(request.GET["qty"])  # Convert to int for comparison
 
     if "cart_data_obj" in request.session:
         if product_id in request.session["cart_data_obj"]:
             cart_data = request.session["cart_data_obj"]
             cart_data[str(request.GET["id"])]["qty"] = product_qty
             request.session["cart_data_obj"] = cart_data
+
+    # Get the current product_qty from the database
+    product = Product.objects.get(id=product_id)
+    current_qty = product.in_stock
+
+    # Check if the requested_qty is greater than the current_qty
+    if product_qty > current_qty:
+        # Show a warning and set the requested_qty to the current_qty
+        messages.warning(
+            request,
+            "Requested quantity is greater than available. Setting to available quantity.",
+        )
+        product_qty = current_qty
 
     cart_total_amount = 0
     if "cart_data_obj" in request.session:
@@ -291,5 +311,99 @@ def update_cart(request):
         },
     )
     return JsonResponse(
-        {"data": context, "totalcartitems": len(request.session["cart_data_obj"])}
+        {
+            "data": context,
+            "totalcartitems": len(request.session["cart_data_obj"]),
+            "product_qty": product_qty,
+        }
     )
+
+
+@login_required
+def checkout_view(request):
+    cart_total_amount = 0
+    total_amount = 0
+
+    # Checking if cart_data_obj session exists
+    if "cart_data_obj" in request.session:
+        # Getting total amount for Paypal Amount
+        for p_id, item in request.session["cart_data_obj"].items():
+            total_amount += int(item["qty"]) * float(item["price"])
+
+        # Create ORder Object
+        order = CartOrder.objects.create(user=request.user, price=total_amount)
+
+        # Getting total amount for The Cart
+        for p_id, item in request.session["cart_data_obj"].items():
+            cart_total_amount += int(item["qty"]) * float(item["price"])
+
+            cart_order_products = CartOrderItems.objects.create(
+                order=order,
+                invoice_no="INVOICE_NO-" + str(order.id),  # INVOICE_NO-5,
+                item=item["title"],
+                image=item["image"],
+                qty=item["qty"],
+                price=item["price"],
+                total=float(item["qty"]) * float(item["price"]),
+            )
+
+        host = request.get_host()
+        paypal_dict = {
+            "business": settings.PAYPAL_RECEIVER_EMAIL,
+            "amount": cart_total_amount,
+            "item_name": "Order-Item-No-" + str(order.id),
+            "invoice": "INVOICE_NO-" + str(order.id),
+            "currency_code": "USD",
+            "notify_url": "http://{}{}".format(host, reverse("core:paypal-ipn")),
+            "return_url": "http://{}{}".format(host, reverse("core:payment-completed")),
+            "cancel_url": "http://{}{}".format(host, reverse("core:payment-failed")),
+        }
+
+        paypal_payment_button = PayPalPaymentsForm(initial=paypal_dict)
+
+        # cart_total_amount = 0
+        # if 'cart_data_obj' in request.session:
+        #     for p_id, item in request.session['cart_data_obj'].items():
+        #         cart_total_amount += int(item['qty']) * float(item['price'])
+
+        try:
+            active_address = Address.objects.get(user=request.user, status=True)
+        except:
+            messages.warning(
+                request, "There are multiple addresses, only one should be activated."
+            )
+            active_address = None
+
+        return render(
+            request,
+            "core/checkout.html",
+            {
+                "cart_data": request.session["cart_data_obj"],
+                "totalcartitems": len(request.session["cart_data_obj"]),
+                "cart_total_amount": cart_total_amount,
+                "paypal_payment_button": paypal_payment_button,
+                "active_address": active_address,
+            },
+        )
+
+
+@login_required
+def payment_completed_view(request):
+    cart_total_amount = 0
+    if "cart_data_obj" in request.session:
+        for p_id, item in request.session["cart_data_obj"].items():
+            cart_total_amount += int(item["qty"]) * float(item["price"])
+    return render(
+        request,
+        "core/payment_completed.html",
+        {
+            "cart_data": request.session["cart_data_obj"],
+            "totalcartitems": len(request.session["cart_data_obj"]),
+            "cart_total_amount": cart_total_amount,
+        },
+    )
+
+
+@login_required
+def payment_failed_view(request):
+    return render(request, "core/payment_failed.html")
