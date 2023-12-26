@@ -209,3 +209,38 @@ $(document).on("click", ".delete-product", function () {
 
 })
 
+$(document).on("click", ".update-product", function () {
+
+    let product_id = $(this).attr("data-product")
+    let this_val = $(this)
+    let product_quantity = $(".product-qty-" + product_id).val()
+
+    // Ensure quantity is at least 1
+    if (product_quantity < 1) {
+        alert("Quantity must be at least 1");
+        $(".product-qty-" + product_id).val(1);
+        return;
+    }
+
+    console.log("Product ID:", product_id);
+    console.log("Product QTY:", product_quantity);
+
+    $.ajax({
+        url: "/update-cart",
+        data: {
+            "id": product_id,
+            "qty": product_quantity,
+        },
+        dataType: "json",
+        beforeSend: function () {
+            this_val.hide()
+        },
+        success: function (response) {
+            this_val.show()
+            $(".cart-items-count").text(response.totalcartitems)
+            $("#cart-list").html(response.data)
+            window.location.reload()
+        }
+    })
+
+})
