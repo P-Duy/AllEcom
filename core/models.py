@@ -166,7 +166,7 @@ class Product(models.Model):
         return self.title
 
     def get_precentage(self):
-        new_price = (self.price / self.old_price) * 100
+        new_price = 100 - (self.price / self.old_price) * 100
         return new_price
 
 

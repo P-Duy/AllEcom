@@ -28,4 +28,8 @@ urlpatterns = [
     path("filter-products/", views.filter_product, name="filter-product"),
     # Add to cart URL
     path("add-to-cart/", views.add_to_cart, name="add-to-cart"),
+    # Cart Page URL
+    path("cart/", views.cart_view, name="cart"),
+    # Delete ITem from Cart
+    path("delete-from-cart/", views.delete_item_from_cart, name="delete-from-cart"),
 ]

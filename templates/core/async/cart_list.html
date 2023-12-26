@@ -47,7 +47,6 @@
                                     <td class="image product-thumbnail pt-40"><img src="{{ item.image }}" alt="#"></td>
                                     <td class="product-des product-name">
                                         <h6 class="mb-5"><a class="product-name mb-10 text-heading" href="{% url 'core:product-detail' item.pid %}">{{ item.title }}</a></h6>
-                                       
                                     </td>
                                     <td class="price" data-title="Price">
                                         <h4 class="text-body">${{item.price|floatformat:2}}</h4>
@@ -59,8 +58,7 @@
                                     </td>
                                     <td class="price" data-title="Price">
                                         <h4 class="text-brand">${% widthratio item.price 1 item.qty %} </h4>
-                                    </td>
-                                  
+                                    </td>                                  
                                     <td class="action text-center" data-title="Remove"><button style="border: none; background: none;"  class="text-body update-product" data-product="{{ product_id }}"><i class="fi-rs-refresh"></i></button></td>
                                     <td class="action text-center" data-title="Remove"><button style="border: none; background: none;"  class="text-body delete-product" data-product="{{ product_id }}"><i class="fi-rs-trash"></i></button></td>
 
@@ -94,7 +92,6 @@
                                         </td>
                                         <td class="cart_total_amount">
                                             <h5 class="text-heading text-end">Free</h4</td> </tr> <tr>
-                                       
                                     </tr>
                                     <tr>
                                         <td class="cart_total_label">
@@ -108,7 +105,7 @@
                             </table>
                         </div>
                         {% if totalcartitems %}
-                        <a href="{% url 'core:checkout' %}" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                        <a href="#" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
                         {% endif %}
                     </div>
                 </div>

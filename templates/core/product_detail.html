@@ -57,10 +57,10 @@
                                             </div>
                                             <div class="clearfix product-price-cover">
                                                 <div class="product-price primary-color float-left">
-                                                    <span class="current-price text-brand">${{product.price}}</span>
+                                                    <span class="current-price text-brand">$</span><span class="current-price text-brand current-product-price-{{ product.id }}">{{product.price}}</span>
                                                     <span>
-                                                        <span class="save-price font-md color3 ml-15">-{{product.get_precentage|floatformat:0}}%</span>
-                                                    <span class="old-price font-md ml-15">${{product.old_price}}</span>
+                                                        <span class="save-price font-md color3 ml-15 ">-{{product.get_precentage|floatformat:0}}%</span>
+                                                    <span class="old-price font-md ml-15 ">${{product.old_price}}</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -97,7 +97,7 @@
                                             <div class="font-xs">
                                                 <ul class="mr-50 float-start">
                                                     <li class="mb-5">Type: <span class="text-brand">{{product.title}}</span></li>
-                                                    <li class="mb-5">MFG:<span class="text-brand"> {{product.mdf|date:"d M, Y"}}</span></li>ủ
+                                                    <li class="mb-5">MFG:<span class="text-brand"> {{product.mdf|date:"d M, Y"}}</span></li>
                                                     <li>LIFE: <span class="text-brand">{{product.life}}</span></li>
                                                 </ul>
                                                 <ul class="float-start">
@@ -405,7 +405,7 @@
                                                                 <span> </span>
                                                             </div>
                                                             <div class="product-price">
-                                                                <span>$</span> <span class="current-product-price-{{ p.id }}">{{p.price}}</span>
+                                                                <span>$</span><span class="current-product-price-{{p.id}}">{{p.price}}</span>
                                                                 <span class="old-price">${{p.old_price}}</span>
                                                             </div>
                                                         </div>
