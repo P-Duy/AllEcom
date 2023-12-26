@@ -118,9 +118,12 @@
             </div>
         </div>
     </div>
+    
     <header class="header-area header-style-1 header-height-2">
+
         <div class="mobile-promotion">
             <span>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</span>
+
         </div>
         <div class="header-top header-top-ptb-1 d-none d-lg-block">
             <div class="container">
@@ -249,7 +252,7 @@
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="shop-cart.html">
                                         <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart.svg' %}" />
-                                        <span class="pro-count blue">2</span>
+                                        <span class="pro-count blue cart-items-count">{{ request.session.cart_data_obj|length }}</span>
                                     </a>
                                     <a href="shop-cart.html"><span class="lable">Cart</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
@@ -364,8 +367,8 @@
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                             <nav>
                                 <ul>
-                                    <li class="hot-deals"><img src="{% static 'assets/imgs/theme/icons/icon-hot.svg' %}" alt="hot deals" /><a href="shop-grid-right.html">Deals</a></li>
-                                    <li>
+                                    {% comment %} <li class="hot-deals"><img src="{% static 'assets/imgs/theme/icons/icon-hot.svg' %}" alt="hot deals" /><a href="shop-grid-right.html">Deals</a></li> {% endcomment %}
+                                    {% comment %} <li>
                                         <a class="active" href="index.html">Home <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             <li><a href="index.html">Home 1</a></li>
@@ -375,7 +378,7 @@
                                             <li><a href="index-5.html">Home 5</a></li>
                                             <li><a href="index-6.html">Home 6</a></li>
                                         </ul>
-                                    </li>
+                                    </li> {% endcomment %}
                                     <li>
                                         <a href="shop-grid-right.html">Phân Loại <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
@@ -390,13 +393,13 @@
                                     </li>
 
                                     <li>
-                                        <a href="{% url "core:product-list" %}">Cửa Hàng</a>
+                                        <a href="{% url "core:product-list" %}">Store</a>
                                     </li>
 
 
 
 
-                                    <li class="position-static">
+                                    {% comment %} <li class="position-static">
                                         <a href="#">Mega menu <i class="fi-rs-angle-down"></i></a>
                                         <ul class="mega-menu">
                                             <li class="sub-mega-menu sub-mega-menu-width-22">
@@ -455,7 +458,7 @@
                                                 </div>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> {% endcomment %}
                                     <li>
                                         <a href="blog-category-grid.html">Blog <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
@@ -516,9 +519,9 @@
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="shop-cart.html">
+                                <a class="mini-cart-icon" href="#">
                                     <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart.svg' %}" />
-                                    <span class="pro-count white">2</span>
+                                    <span class="pro-count white cart-items-count">{{ request.session.cart_data_obj|length }}</span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -576,6 +579,7 @@
             </div>
         </div>
     </header>
+    
     <div class="mobile-header-active mobile-header-wrapper-style">
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
@@ -602,14 +606,14 @@
                         <ul class="mobile-menu font-heading">
                             <li class="menu-item-has-children">
                                 <a href="index.html">Home</a>
-                                <ul class="dropdown">
+                                {% comment %} <ul class="dropdown">
                                     <li><a href="index.html">Home 1</a></li>
                                     <li><a href="index-2.html">Home 2</a></li>
                                     <li><a href="index-3.html">Home 3</a></li>
                                     <li><a href="index-4.html">Home 4</a></li>
                                     <li><a href="index-5.html">Home 5</a></li>
                                     <li><a href="index-6.html">Home 6</a></li>
-                                </ul>
+                                </ul> {% endcomment %}
                             </li>
                             <li class="menu-item-has-children">
                                 <a href="shop-grid-right.html">shop</a>
@@ -775,10 +779,10 @@
                                     Stay home & get your daily <br /> needs from our shop
                                 </h2>
                                 <p class="mb-45">Start You'r Daily Shopping with <span class="text-brand">Nest Mart</span></p>
-                                <form class="form-subcriber d-flex">
+                                {% comment %} <form class="form-subcriber d-flex">
                                     <input type="email" placeholder="Your emaill address" />
-                                    <button class="btn" type="submit">Subscribe</button>
-                                </form>
+                                    <bu tton class="btn" type="submit">Subscribe</bu>
+                                </form> {% endcomment %}
                             </div>
                             <img src="{% static 'assets/imgs/banner/banner-9.png' %}" alt="newsletter" />
                         </div>
