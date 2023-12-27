@@ -12,7 +12,7 @@ from core.models import (
     Wishlist,
     Address,
 )
-from userauths.models import User, Profile
+from userauths.models import User, Profile, ContactUs
 
 from django.urls import reverse
 from django.conf import settings
@@ -514,3 +514,43 @@ def remove_wishlist(request):
     wishlist_json = serializers.serialize("json", wishlist)
     t = render_to_string("core/async/wishlist_list.html", context)
     return JsonResponse({"data": t, "w": wishlist_json})
+
+
+def contact(request):
+    return render(request, "core/contact.html")
+
+
+def ajax_contact_form(request):
+    full_name = request.GET["full_name"]
+    email = request.GET["email"]
+    phone = request.GET["phone"]
+    subject = request.GET["subject"]
+    message = request.GET["message"]
+
+    contact = ContactUs.objects.create(
+        full_name=full_name,
+        email=email,
+        phone=phone,
+        subject=subject,
+        message=message,
+    )
+
+    data = {"bool": True, "message": "Message Sent Successfully"}
+
+    return JsonResponse({"data": data})
+
+
+def about_us(request):
+    return render(request, "core/about_us.html")
+
+
+def purchase_guide(request):
+    return render(request, "core/purchase_guide.html")
+
+
+def privacy_policy(request):
+    return render(request, "core/privacy_policy.html")
+
+
+def terms_of_service(request):
+    return render(request, "core/terms_of_service.html")
