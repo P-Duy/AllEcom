@@ -12,6 +12,7 @@ from core.models import (
     Wishlist,
     Address,
 )
+from userauths.models import User, Profile
 
 from django.urls import reverse
 from django.conf import settings
@@ -26,7 +27,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.db.models.functions import ExtractMonth
 import calendar
-
+from django.core import serializers
 
 # Create your views here.
 def index(request):
@@ -459,7 +460,7 @@ def customer_dashboard(request):
 
 def order_detail(request, id):
     order = CartOrder.objects.get(user=request.user, id=id)
-    order_items = CartOrderProducts.objects.filter(order=order)
+    order_items = CartOrderItems.objects.filter(order=order)
 
     context = {
         "order_items": order_items,
@@ -488,16 +489,28 @@ def add_to_wishlist(request):
 
     context = {}
 
-    wishlist_count = wishlist.objects.filter(product=product, user=request.user).count()
+    wishlist_count = Wishlist.objects.filter(product=product, user=request.user).count()
     print(wishlist_count)
 
     if wishlist_count > 0:
         context = {"bool": True}
     else:
-        new_wishlist = wishlist.objects.create(
+        new_wishlist = Wishlist.objects.create(
             user=request.user,
             product=product,
         )
         context = {"bool": True}
 
     return JsonResponse(context)
+
+
+def remove_wishlist(request):
+    pid = request.GET["id"]
+    wishlist = Wishlist.objects.filter(user=request.user)
+    wishlist_d = Wishlist.objects.get(id=pid)
+    delete_product = wishlist_d.delete()
+
+    context = {"bool": True, "w": wishlist}
+    wishlist_json = serializers.serialize("json", wishlist)
+    t = render_to_string("core/async/wishlist_list.html", context)
+    return JsonResponse({"data": t, "w": wishlist_json})

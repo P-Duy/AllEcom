@@ -3,7 +3,8 @@ from userauths.forms import UserRegisterForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.conf import settings
-from userauths.models import User
+from userauths.forms import UserRegisterForm, ProfileForm
+from userauths.models import User, Profile
 
 # User = settings.AUTH_USER_MODEL
 
@@ -61,3 +62,24 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You are logged out")
     return redirect("userauths:sign-in")
+
+
+def profile_update(request):
+    profile = Profile.objects.get(user=request.user)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            new_form = form.save(commit=False)
+            new_form.user = request.user
+            new_form.save()
+            messages.success(request, "Profile Updated Successfully.")
+            return redirect("core:dashboard")
+    else:
+        form = ProfileForm(instance=profile)
+
+    context = {
+        "form": form,
+        "profile": profile,
+    }
+
+    return render(request, "userauths/profile_edit.html", context)

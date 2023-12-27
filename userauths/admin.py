@@ -1,13 +1,19 @@
 from django.contrib import admin
-from userauths.models import User
-# Register your models here.
+from userauths.models import User, ContactUs, Profile
+
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'username', 'bio')
-    search_fields = ('email', 'username')
-    readonly_fields = ('date_joined', 'last_login')
-    
-    filter_horizontal = ()
-    list_filter = ()
-    fieldsets = ()
+    list_display = ["username", "email", "bio"]
+
+
+class ContactUsAdmin(admin.ModelAdmin):
+    list_display = ["full_name", "email", "subject"]
+
+
+# class ProfileAdmin(admin.ModelAdmin):
+#     list_display = ['user', 'full_name', 'bio', 'phone']
+
+
 admin.site.register(User, UserAdmin)
+admin.site.register(ContactUs, ContactUsAdmin)
+admin.site.register(Profile)

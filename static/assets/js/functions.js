@@ -237,6 +237,28 @@ $(document).ready(function () {
         })
     })
 
+    // Remove from wishlist
+    $(document).on("click", ".delete-wishlist-product", function () {
+        let wishlist_id = $(this).attr("data-wishlist-product")
+        let this_val = $(this)
+
+        console.log("wishlist id is:", wishlist_id);
+
+        $.ajax({
+            url: "/remove-from-wishlist",
+            data: {
+                "id": wishlist_id
+            },
+            dataType: "json",
+            beforeSend: function () {
+                console.log("Deleting product from wishlist...");
+            },
+            success: function (response) {
+                $("#wishlist-list").html(response.data)
+            }
+        })
+    })
+
 })
 $(document).on("click", ".delete-product", function () {
 
@@ -260,6 +282,8 @@ $(document).on("click", ".delete-product", function () {
             $("#cart-list").html(response.data)
         }
     })
+    // Remove from wishlist
+
 
 })
 
@@ -300,3 +324,5 @@ $(document).on("click", ".update-product", function () {
     })
 
 })
+
+
