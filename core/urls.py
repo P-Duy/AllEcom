@@ -42,4 +42,16 @@ urlpatterns = [
     path("payment-completed/", views.payment_completed_view, name="payment-completed"),
     # Payment Failed
     path("payment-failed/", views.payment_failed_view, name="payment-failed"),
+    # Dashboard URL
+    path("dashboard/", views.customer_dashboard, name="dashboard"),
+    # Order Detail URL
+    path("dashboard/order/<int:id>", views.order_detail, name="order-detail"),
+    # Making address defauly
+    path(
+        "make-default-address/", views.make_address_default, name="make-default-address"
+    ),
+    # wishlist page
+    path("wishlist/", views.wishlist_view, name="wishlist"),
+    # adding to wishlist
+    path("add-to-wishlist/", views.add_to_wishlist, name="add-to-wishlist"),
 ]

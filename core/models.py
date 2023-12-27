@@ -193,7 +193,7 @@ class CartOrder(models.Model):
     paid_status = models.BooleanField(default=False)
     order_date = models.DateTimeField(auto_now_add=True)
     product_status = models.CharField(
-        choices=STATUS, max_length=10, default="processing"
+        choices=STATUS_CHOICES, max_length=10, default="processing"
     )
 
     class Meta:
@@ -241,7 +241,7 @@ class ProductReview(models.Model):
         return self.rating
 
 
-class wishlist(models.Model):
+class Wishlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
     date = models.DateTimeField(auto_now_add=True)
@@ -255,7 +255,8 @@ class wishlist(models.Model):
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    address = models.CharField(max_length=200, null=True)
+    mobile = models.CharField(max_length=300, null=True)
+    address = models.CharField(max_length=100, null=True)
     status = models.BooleanField(default=False)
 
     class Meta:

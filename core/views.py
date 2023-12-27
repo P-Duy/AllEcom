@@ -9,7 +9,7 @@ from core.models import (
     CartOrderItems,
     ProductImages,
     ProductReview,
-    wishlist,
+    Wishlist,
     Address,
 )
 
@@ -24,6 +24,8 @@ from taggit.models import Tag
 from core.forms import ProductReviewForm
 from django.template.loader import render_to_string
 from django.contrib import messages
+from django.db.models.functions import ExtractMonth
+import calendar
 
 
 # Create your views here.
@@ -407,3 +409,95 @@ def payment_completed_view(request):
 @login_required
 def payment_failed_view(request):
     return render(request, "core/payment_failed.html")
+
+
+@login_required
+def customer_dashboard(request):
+    orders_list = CartOrder.objects.filter(user=request.user).order_by("-id")
+    address = Address.objects.filter(user=request.user)
+
+    orders = (
+        CartOrder.objects.annotate(month=ExtractMonth("order_date"))
+        .values("month")
+        .annotate(count=Count("id"))
+        .values("month", "count")
+    )
+    month = []
+    total_orders = []
+
+    for i in orders:
+        month.append(calendar.month_name[i["month"]])
+        total_orders.append(i["count"])
+
+    if request.method == "POST":
+        address = request.POST.get("address")
+        mobile = request.POST.get("mobile")
+
+        new_address = Address.objects.create(
+            user=request.user,
+            address=address,
+            mobile=mobile,
+        )
+        messages.success(request, "Address Added Successfully.")
+        return redirect("core:dashboard")
+    else:
+        print("Error")
+
+    user_profile = Profile.objects.get(user=request.user)
+    print("user profile is: #########################", user_profile)
+
+    context = {
+        "user_profile": user_profile,
+        "orders": orders,
+        "orders_list": orders_list,
+        "address": address,
+        "month": month,
+        "total_orders": total_orders,
+    }
+    return render(request, "core/dashboard.html", context)
+
+
+def order_detail(request, id):
+    order = CartOrder.objects.get(user=request.user, id=id)
+    order_items = CartOrderProducts.objects.filter(order=order)
+
+    context = {
+        "order_items": order_items,
+    }
+    return render(request, "core/order_detail.html", context)
+
+
+def make_address_default(request):
+    id = request.GET["id"]
+    Address.objects.update(status=False)
+    Address.objects.filter(id=id).update(status=True)
+    return JsonResponse({"boolean": True})
+
+
+@login_required
+def wishlist_view(request):
+    wishlist = Wishlist.objects.all()
+    context = {"w": wishlist}
+    return render(request, "core/wishlist.html", context)
+
+
+def add_to_wishlist(request):
+    product_id = request.GET["id"]
+    product = Product.objects.get(id=product_id)
+    print("product id isssssssssssss:" + product_id)
+
+    context = {}
+
+    wishlist_count = wishlist.objects.filter(product=product, user=request.user).count()
+    print(wishlist_count)
+
+    if wishlist_count > 0:
+        context = {"bool": True}
+    else:
+        new_wishlist = wishlist.objects.create(
+            user=request.user,
+            product=product,
+        )
+        context = {"bool": True}
+
+    return JsonResponse(context)
