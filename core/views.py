@@ -97,7 +97,10 @@ def product_detail_view(request, pid):
     make_review = True
 
     if request.user.is_authenticated:
-        address = Address.objects.get(status=True, user=request.user)
+        try:
+            address = Address.objects.get(status=True, user=request.user)
+        except Address.DoesNotExist:
+            address = None
         user_review_count = ProductReview.objects.filter(
             user=request.user, product=product
         ).count()
@@ -144,7 +147,7 @@ def ajax_add_review(request, pid):
     )
 
     context = {
-        "user": user.username.id,
+        "user": user.username,
         "review": request.POST["review"],
         "rating": request.POST["rating"],
     }
@@ -236,6 +239,13 @@ def cart_view(request):
     cart_total_amount = 0
     if "cart_data_obj" in request.session:
         for p_id, item in request.session["cart_data_obj"].items():
+            product = get_object_or_404(Product, id=p_id)
+            if product.stock_count < int(item["qty"]):
+                messages.warning(
+                    request,
+                    f"Sorry, we only have {product.stock_count} {product.title}(s) in stock.",
+                )
+                return redirect("core:product-detail", product.pid)
             cart_total_amount += int(item["qty"]) * float(item["price"])
         return render(
             request,
@@ -292,13 +302,13 @@ def update_cart(request):
     current_qty = product.in_stock
 
     # Check if the requested_qty is greater than the current_qty
-    if product_qty > current_qty:
-        # Show a warning and set the requested_qty to the current_qty
-        messages.warning(
-            request,
-            "Requested quantity is greater than available. Setting to available quantity.",
-        )
-        product_qty = current_qty
+    # if product_qty > current_qty:
+    #     # Show a warning and set the requested_qty to the current_qty
+    #     messages.warning(
+    #         request,
+    #         "Requested quantity is greater than available. Setting to available quantity.",
+    #     )
+    #     product_qty = current_qty
 
     cart_total_amount = 0
     if "cart_data_obj" in request.session:
@@ -317,7 +327,6 @@ def update_cart(request):
         {
             "data": context,
             "totalcartitems": len(request.session["cart_data_obj"]),
-            "product_qty": product_qty,
         }
     )
 

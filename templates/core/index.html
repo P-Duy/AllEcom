@@ -14,10 +14,6 @@
                                             Don’t miss amazing<br /> grocery deals
                                         </h1>
                                         <p class="mb-65">Sign up for the daily newsletter</p>
-                                        <form class="form-subcriber d-flex">
-                                            <input type="email" placeholder="Your emaill address" />
-                                            <button class="btn" type="submit">Subscribe</button>
-                                        </form>
                                     </div>
                                 </div>
                                 <div class="single-hero-slider single-animation-wrap" style="background-image: url({% static "assets/imgs/slider/slider-2.png" %})">
@@ -26,10 +22,6 @@
                                             Fresh Vegetables<br /> Big discount
                                         </h1>
                                         <p class="mb-65">Save up to 50% off on your first order</p>
-                                        <form class="form-subcriber d-flex">
-                                            <input type="email" placeholder="Your emaill address" />
-                                            <button class="btn" type="submit">Subscribe</button>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -3020,7 +3012,7 @@
                     <!-- Fillter By Price -->
                     <div class="sidebar-widget price_range range mb-30">
                         <h5 class="section-title style-1 mb-30">Fill by price</h5>
-                        <div class="price-filter">
+                        {% comment %} <div class="price-filter">
                             <div class="price-filter-inner">
                                 <div id="slider-range" class="mb-20"></div>
                                 <div class="d-flex justify-content-between">
@@ -3028,8 +3020,8 @@
                                     <div class="caption">To: <strong id="slider-range-value2" class="text-brand"></strong></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="list-group">
+                        </div> {% endcomment %}
+                        {% comment %} <div class="list-group">
                             <div class="list-group-item mb-10 mt-10">
                                 <label class="fw-900">Color</label>
                                 <div class="custome-checkbox">
@@ -3054,7 +3046,7 @@
                                     <label class="form-check-label" for="exampleCheckbox31"><span>Used (45)</span></label>
                                 </div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i> Fillter</a>
                     </div>
                     <!-- Product sidebar Widget -->

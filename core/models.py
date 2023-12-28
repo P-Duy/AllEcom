@@ -130,7 +130,7 @@ class Product(models.Model):
 
     specifications = RichTextUploadingField(blank=True, default="this is the product")
     type = models.CharField(max_length=100, default="Organic", null=True, blank=True)
-    stock_count = models.CharField(max_length=100, default="10", null=True, blank=True)
+    stock_count = models.IntegerField(default="10", null=True, blank=True)
     life = models.CharField(max_length=100, default="100 ngày", null=True, blank=True)
     mdf = models.DateTimeField(auto_now_add=False, null=True, blank=True)
 

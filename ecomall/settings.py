@@ -158,6 +158,7 @@ AUTH_USER_MODEL = "userauths.User"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
+USERNAME_FIELD = "email"
 
 CKEDITOR_CONFIGS = {
     "default": {
@@ -170,3 +171,4 @@ CKEDITOR_CONFIGS = {
 
 PAYPAL_RECEIVER_EMAIL = "sb-qmqco28921691@business.example.com"
 PAYPAL_TEST = True
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
